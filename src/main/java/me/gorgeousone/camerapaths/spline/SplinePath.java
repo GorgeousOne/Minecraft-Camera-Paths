@@ -1,5 +1,7 @@
-package me.gorgeousone.camerapaths;
+package me.gorgeousone.camerapaths.spline;
 
+import me.gorgeousone.camerapaths.spline.HermiteSpline;
+import me.gorgeousone.camerapaths.spline.Spline;
 import org.bukkit.util.Vector;
 
 import java.util.ArrayList;
@@ -106,5 +108,9 @@ public class SplinePath {
 	
 	private String strVec(Vector vec) {
 		return String.format("(%.2f, %.2f, %.2f)", vec.getX(), vec.getY(), vec.getZ());
+	}
+	
+	public int getPointCount() {
+		return points.size();
 	}
 }

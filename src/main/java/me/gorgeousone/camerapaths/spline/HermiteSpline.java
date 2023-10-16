@@ -1,11 +1,12 @@
-package me.gorgeousone.camerapaths;
+package me.gorgeousone.camerapaths.spline;
 
+import me.gorgeousone.camerapaths.util.VecUtil;
 import org.bukkit.util.Vector;
 
 import java.util.ArrayList;
 import java.util.List;
 
-class HermiteSpline implements Spline {
+public class HermiteSpline implements Spline {
 	private final Vector p0;
 	private final Vector p1;
 	private final Vector v0;

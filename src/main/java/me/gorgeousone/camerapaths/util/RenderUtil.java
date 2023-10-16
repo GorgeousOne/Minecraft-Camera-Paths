@@ -1,5 +1,6 @@
-package me.gorgeousone.camerapaths;
+package me.gorgeousone.camerapaths.util;
 
+import me.gorgeousone.camerapaths.spline.SplinePath;
 import org.bukkit.Particle;
 import org.bukkit.entity.Player;
 import org.bukkit.util.Vector;

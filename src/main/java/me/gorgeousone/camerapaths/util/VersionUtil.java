@@ -1,4 +1,4 @@
-package me.gorgeousone.camerapaths;
+package me.gorgeousone.camerapaths.util;
 import org.bukkit.Bukkit;
 
 public final class VersionUtil {

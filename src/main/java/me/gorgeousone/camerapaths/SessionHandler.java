@@ -1,5 +1,7 @@
 package me.gorgeousone.camerapaths;
 
+import me.gorgeousone.camerapaths.spline.SplinePath;
+import me.gorgeousone.camerapaths.util.RenderUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;

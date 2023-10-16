@@ -1,9 +1,12 @@
-package me.gorgeousone.camerapaths;
+package me.gorgeousone.camerapaths.util;
 
 import com.comphenix.protocol.PacketType;
 import com.comphenix.protocol.ProtocolLibrary;
 import com.comphenix.protocol.ProtocolManager;
 import com.comphenix.protocol.events.PacketContainer;
+import org.bukkit.Bukkit;
+import org.bukkit.Location;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.util.Vector;
 
@@ -27,10 +30,44 @@ public final class PacketUtil {
 		}
 	}
 	
+	public static void sendEntityMove(Player player, Entity entity,
+			Vector relMove,
+			boolean isOnGround) {
+		
+		ProtocolManager protocolManager = ProtocolLibrary.getProtocolManager();
+		PacketContainer moveLookPacket = protocolManager.createPacket(PacketType.Play.Server.REL_ENTITY_MOVE);
+		
+		moveLookPacket.getIntegers().write(0, entity.getEntityId());
+		
+		if (useMovementPacket1_14) {
+			moveLookPacket.getShorts()
+					.write(0, (short) (relMove.getX() * 4096))
+					.write(1, (short) (relMove.getY() * 4096))
+					.write(2, (short) (relMove.getZ() * 4096));
+		} else if (usePositionPacket1_9) {
+			moveLookPacket.getIntegers()
+					.write(1, (int) (relMove.getX() * 4096))
+					.write(2, (int) (relMove.getY() * 4096))
+					.write(3, (int) (relMove.getZ() * 4096));
+		} else {
+			moveLookPacket.getBytes()
+					.write(1, (byte) (relMove.getX() * 4096))
+					.write(2, (byte) (relMove.getY() * 4096))
+					.write(3, (byte) (relMove.getZ() * 4096));
+		}
+		
+		//no idea what field 1 does, seems to be always true
+		moveLookPacket.getBooleans()
+				.write(0, isOnGround)
+				.write(1, true);
+		
+		sendPacket(player, moveLookPacket);
+	}
+	
 	public static void sendPlayerMove(Player player,
 			Vector relMove,
-			double newYaw,
-			double newPitch,
+//			double newYaw,
+//			double newPitch,
 			boolean isOnGround) {
 		
 		ProtocolManager protocolManager = ProtocolLibrary.getProtocolManager();
@@ -39,40 +76,37 @@ public final class PacketUtil {
 		moveLookPacket.getIntegers().write(0, player.getEntityId());
 		
 		if (useMovementPacket1_14) {
-			
 			moveLookPacket.getShorts()
 					.write(0, (short) (relMove.getX() * 4096))
 					.write(1, (short) (relMove.getY() * 4096))
 					.write(2, (short) (relMove.getZ() * 4096));
-			
 		} else if (usePositionPacket1_9) {
-			
 			moveLookPacket.getIntegers()
 					.write(1, (int) (relMove.getX() * 4096))
 					.write(2, (int) (relMove.getY() * 4096))
 					.write(3, (int) (relMove.getZ() * 4096));
 		} else {
-			
 			moveLookPacket.getBytes()
 					.write(1, (byte) (relMove.getX() * 4096))
 					.write(2, (byte) (relMove.getY() * 4096))
 					.write(3, (byte) (relMove.getZ() * 4096));
 		}
 		
+		Location playerLoc = player.getLocation();
 		moveLookPacket.getBytes()
-				.write(0, (byte) (newYaw * 256 / 360))
-				.write(1, (byte) (newPitch * 256 / 360));
+				.write(0, (byte) (playerLoc.getYaw() * 256 / 360))
+				.write(1, (byte) (playerLoc.getPitch()  * 256 / 360));
 		
 		//no idea what field 1 does, seems to be always true
 		moveLookPacket.getBooleans()
 				.write(0, isOnGround)
 				.write(1, true);
 		
-		PacketContainer headRotPacket = protocolManager.createPacket(PacketType.Play.Server.ENTITY_HEAD_ROTATION);
-		headRotPacket.getIntegers().write(0, player.getEntityId());
-		headRotPacket.getBytes().write(0, (byte) (int) (newYaw * 265 / 360));
+//		PacketContainer headRotPacket = protocolManager.createPacket(PacketType.Play.Server.ENTITY_HEAD_ROTATION);
+//		headRotPacket.getIntegers().write(0, player.getEntityId());
+//		headRotPacket.getBytes().write(0, (byte) (int) (playerLoc.getYaw() * 265 / 360));
 		
 		sendPacket(player, moveLookPacket);
-		sendPacket(player, headRotPacket);
+//		sendPacket(player, headRotPacket);
 	}
 }

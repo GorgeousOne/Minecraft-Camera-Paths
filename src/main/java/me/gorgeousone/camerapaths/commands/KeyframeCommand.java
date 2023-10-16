@@ -1,8 +1,7 @@
 package me.gorgeousone.camerapaths.commands;
 
-import me.gorgeousone.camerapaths.RenderUtil;
 import me.gorgeousone.camerapaths.SessionHandler;
-import me.gorgeousone.camerapaths.SplinePath;
+import me.gorgeousone.camerapaths.spline.SplinePath;
 import me.gorgeousone.camerapaths.cmdframework.argument.ArgType;
 import me.gorgeousone.camerapaths.cmdframework.argument.ArgValue;
 import me.gorgeousone.camerapaths.cmdframework.argument.Argument;
