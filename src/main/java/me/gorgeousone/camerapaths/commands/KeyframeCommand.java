@@ -6,6 +6,7 @@ import me.gorgeousone.camerapaths.cmdframework.argument.ArgType;
 import me.gorgeousone.camerapaths.cmdframework.argument.ArgValue;
 import me.gorgeousone.camerapaths.cmdframework.argument.Argument;
 import me.gorgeousone.camerapaths.cmdframework.command.ArgCommand;
+import me.gorgeousone.camerapaths.util.RenderUtil;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -35,6 +36,7 @@ public class KeyframeCommand extends ArgCommand {
 		Vector pos = player.getEyeLocation().toVector();
 		int index = path.addPoint(argValues.get(0).getInt(), pos);
 		
+		RenderUtil.renderPath(player, path);
 		sender.sendMessage(ChatColor.GRAY + "Added keyframe at index " + index + ".");
 	}
 }

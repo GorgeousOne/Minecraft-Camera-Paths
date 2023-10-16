@@ -1,10 +1,9 @@
 package me.gorgeousone.camerapaths.animation;
 
 import me.gorgeousone.camerapaths.spline.SplinePath;
-import me.gorgeousone.camerapaths.util.PacketUtil;
+import me.gorgeousone.camerapaths.util.HackUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
-import org.bukkit.Particle;
 import org.bukkit.entity.ArmorStand;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
@@ -12,6 +11,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Vector;
 
+import java.lang.reflect.InvocationTargetException;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
@@ -42,7 +42,14 @@ public class AnimationHandler {
 		
 		ArmorStand gizmo = player.getWorld().spawn(startLoc, ArmorStand.class);
 		gizmo.setGravity(false);
-		gizmo.setVisible(false);
+//		gizmo.setVisible(false);
+		gizmo.setSmall(true);
+		gizmo.setMarker(true);
+		gizmo.setInvulnerable(true);
+		gizmo.setCollidable(false);
+		gizmo.setCustomNameVisible(true);
+		gizmo.setCustomName("Gizmo");
+		
 		gizmo.addPassenger(player);
 		playerGizmos.put(playerId, gizmo.getUniqueId());
 		lastPlayerPositions.put(playerId, startLoc.toVector());
@@ -82,9 +89,11 @@ public class AnimationHandler {
 		
 		Entity gizmo = Bukkit.getEntity(playerGizmos.get(playerId));
 		
-		PacketUtil.sendEntityMove(player, gizmo, relativePos, false);
-//		PacketUtil.sendPlayerMove(player, relativePos, false);
-//		player.spawnParticle(Particle.HEART, nextPos.getX(), nextPos.getY(), nextPos.getZ(), 0, 0f, 0f, 0f);
+		try {
+			HackUtil.smoothMoveEntity(gizmo, relativePos);
+		} catch (InvocationTargetException | IllegalAccessException e) {
+			throw new RuntimeException(e);
+		}
 		
 		lastPlayerPositions.put(playerId, nextPos);
 		

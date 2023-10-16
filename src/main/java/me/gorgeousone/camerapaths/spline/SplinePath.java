@@ -106,10 +106,6 @@ public class SplinePath {
 		return directionBackwards.add(directionForwards).normalize();
 	}
 	
-	private String strVec(Vector vec) {
-		return String.format("(%.2f, %.2f, %.2f)", vec.getX(), vec.getY(), vec.getZ());
-	}
-	
 	public int getPointCount() {
 		return points.size();
 	}
