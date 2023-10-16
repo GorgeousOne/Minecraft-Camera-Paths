@@ -5,7 +5,7 @@ import org.bukkit.util.Vector;
 import java.util.ArrayList;
 import java.util.List;
 
-class HermitSpline {
+class HermiteSpline implements Spline {
 	private final Vector p0;
 	private final Vector p1;
 	private final Vector v0;
@@ -13,15 +13,7 @@ class HermitSpline {
 	private List<Vector> lookupTable;
 	private List<Double> lengthLookupTable;
 	
-//	public CatmullRomSpline(Vector v0, Vector v1, Vector v2, Vector v3, int segments) {
-//		this.p1 = v1;
-//		this.p2 = v2;
-//		this.v1 = v2.clone().subtract(v0).multiply(0.5);
-//		this.v2 = v3.clone().subtract(v1).multiply(0.5);
-//		generateLookupTable(segments);
-//	}
-	
-	public HermitSpline(Vector p0, Vector p1, Vector v0, Vector v1, int segments) {
+	public HermiteSpline(Vector p0, Vector p1, Vector v0, Vector v1, int segments) {
 		this.p0 = p0;
 		this.p1 = p1;
 		this.v0 = v0;
@@ -32,6 +24,7 @@ class HermitSpline {
 	private void generateLookupTable(int segments) {
 		lookupTable = new ArrayList<>();
 		lengthLookupTable = new ArrayList<>();
+		lengthLookupTable.add(0.0);
 		
 		double step = 1.0 / (segments - 1);
 		Vector lastPoint = null;
@@ -43,8 +36,7 @@ class HermitSpline {
 			lookupTable.add(point);
 			
 			if (i > 0) {
-				double length = point.distance(lastPoint);
-				totalLength += length;
+				totalLength += point.distance(lastPoint);
 				lengthLookupTable.add(totalLength);
 			}
 			lastPoint = point;
@@ -52,28 +44,26 @@ class HermitSpline {
 		}
 	}
 	
-	public double getApproxLength() {
+	public double getLength() {
 		return lengthLookupTable.get(lengthLookupTable.size() - 1);
 	}
 	
 	//TODO: use binary search :D
 	public Vector lookup(double dist) {
-		if (dist <= 0) {
-			return lookupTable.get(0);
-		}
-		if (dist >= getApproxLength()) {
+		if (dist >= getLength()) {
 			return lookupTable.get(lookupTable.size() - 1);
 		}
-		int index = 0;
-		while (lengthLookupTable.get(index) < dist) {
+		int index = 1;
+		while (index < lengthLookupTable.size() - 1 && lengthLookupTable.get(index) < dist) {
 			++index;
 		}
+		Vector p0 = lookupTable.get(index - 1);
+		Vector p1 = lookupTable.get(index);
+		
 		double lengthBefore = lengthLookupTable.get(index - 1);
 		double segmentLength = lengthLookupTable.get(index) - lengthBefore;
-		double segmentDist = dist - lengthBefore;
-		double t = segmentDist / segmentLength;
-		
-		return interpolate(t);
+		double t = (dist - lengthBefore) / segmentLength;
+		return VecUtil.lerp(p0, p1, t);
 	}
 	
 	public Vector interpolate(double t) {
@@ -86,11 +76,11 @@ class HermitSpline {
 		);
 	}
 	
-	private double hermite(double p1, double p2, double v1, double v2, double t, double t2, double t3) {
+	private double hermite(double p0, double p1, double v0, double v1, double t, double t2, double t3) {
 		double h1 = 2 * t3 - 3 * t2 + 1;
 		double h2 = -2 * t3 + 3 * t2;
 		double h3 = t3 - 2 * t2 + t;
 		double h4 = t3 - t2;
-		return h1 * p1 + h2 * p2 + h3 * v1 + h4 * v2;
+		return h1 * p0 + h2 * p1 + h3 * v0 + h4 * v1;
 	}
 }

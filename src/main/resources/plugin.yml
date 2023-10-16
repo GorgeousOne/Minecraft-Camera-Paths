@@ -1,3 +1,6 @@
 name: CameraPaths
 version: '${project.version}'
-main: me.gorgeousone.camerapaths.CameraPaths
+main: me.gorgeousone.camerapaths.CameraPathsPlugin
+commands:
+    cam:
+        default: op
