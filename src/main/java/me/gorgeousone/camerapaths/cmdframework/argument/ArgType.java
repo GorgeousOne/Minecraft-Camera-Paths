@@ -1,4 +1,4 @@
-package me.gorgeousone.tangledmaze.cmdframework.argument;
+package me.gorgeousone.camerapaths.cmdframework.argument;
 
 public enum ArgType {
 	

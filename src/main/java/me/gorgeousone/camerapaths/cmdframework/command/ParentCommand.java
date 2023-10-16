@@ -1,4 +1,4 @@
-package me.gorgeousone.tangledmaze.cmdframework.command;
+package me.gorgeousone.camerapaths.cmdframework.command;
 
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;

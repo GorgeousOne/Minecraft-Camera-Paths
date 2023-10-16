@@ -1,6 +1,5 @@
-package me.gorgeousone.tangledmaze.cmdframework.command;
+package me.gorgeousone.camerapaths.cmdframework.command;
 
-import me.gorgeousone.tangledmaze.data.Message;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
@@ -95,7 +94,7 @@ public abstract class BaseCommand {
 			return;
 		}
 		if (getPermission() != null && !sender.hasPermission(getPermission())) {
-			Message.ERROR_MISSING_PERMISSION.sendTo(sender);
+			sender.sendMessage(ChatColor.RED + "You don't have permission to execute this command.");
 			finishAsync(sender);
 			return;
 		}

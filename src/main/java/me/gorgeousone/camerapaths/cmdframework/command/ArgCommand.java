@@ -1,7 +1,7 @@
-package me.gorgeousone.tangledmaze.cmdframework.command;
+package me.gorgeousone.camerapaths.cmdframework.command;
 
-import me.gorgeousone.tangledmaze.cmdframework.argument.ArgValue;
-import me.gorgeousone.tangledmaze.cmdframework.argument.Argument;
+import me.gorgeousone.camerapaths.cmdframework.argument.ArgValue;
+import me.gorgeousone.camerapaths.cmdframework.argument.Argument;
 import org.bukkit.command.CommandSender;
 
 import java.util.ArrayList;
