@@ -1,6 +1,8 @@
 package me.gorgeousone.camerapaths.animation;
 
 import me.gorgeousone.camerapaths.spline.SplinePath;
+import org.bukkit.Location;
+import org.bukkit.World;
 import org.bukkit.util.Vector;
 
 public class Animation {
@@ -36,7 +38,9 @@ public class Animation {
 		return Math.min(1, Math.max(0, progress));
 	}
 	
-	public Vector getPoint(long time) {
-		return path.getPoint(getProgress(time) * path.getLength());
+	public Location getPoint(long time, World world) {
+		Location point = path.getPoint(getProgress(time) * path.getLength());
+		point.setWorld(world);
+		return point;
 	}
 }

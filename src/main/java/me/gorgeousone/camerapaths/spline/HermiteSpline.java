@@ -15,10 +15,14 @@ public class HermiteSpline implements Spline {
 	private List<Double> lengthLookupTable;
 	
 	public HermiteSpline(Vector p0, Vector p1, Vector v0, Vector v1, int segments) {
-		this.p0 = p0;
-		this.p1 = p1;
-		this.v0 = v0;
-		this.v1 = v1;
+		this.p0 = p0.clone();
+		this.p1 = p1.clone();
+		this.v0 = v0.clone();
+		this.v1 = v1.clone();
+		
+		if (p0.getZ() == 0) {
+			System.out.println(VecUtil.strVec(p0) + " " + VecUtil.strVec(p1));
+		}
 		generateLookupTable(segments);
 	}
 	

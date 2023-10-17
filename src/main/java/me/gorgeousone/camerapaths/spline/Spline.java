@@ -6,4 +6,5 @@ public interface Spline {
 	
 	Vector lookup(double t);
 	double getLength();
+	Vector interpolate(double t);
 }

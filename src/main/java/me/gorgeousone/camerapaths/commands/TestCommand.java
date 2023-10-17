@@ -48,9 +48,11 @@ public class TestCommand extends ArgCommand {
 		SplinePath path = sessionHandler.getCameraPath(player.getUniqueId());
 		path.clear();
 		
+		float yaw = loc.getYaw();
+		
 		for (int i = 0; i < nodes; ++i) {
 			int sign = i % 2 == 0 ? 1 : -1;
-			path.addPoint(-1, start);
+			path.addPoint(-1, start, yaw + 45 * sign, 0);
 			start.add(dir);
 			start.add(ortho.clone().multiply(sign));
 			
