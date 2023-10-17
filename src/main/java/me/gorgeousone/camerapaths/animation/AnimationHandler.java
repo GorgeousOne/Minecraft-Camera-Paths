@@ -1,8 +1,9 @@
 package me.gorgeousone.camerapaths.animation;
 
 import me.gorgeousone.camerapaths.spline.SplinePath;
-import me.gorgeousone.camerapaths.util.HackUtil;
+import me.gorgeousone.camerapaths.util.NmsUtil;
 import org.bukkit.Bukkit;
+import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.entity.ArmorStand;
 import org.bukkit.entity.Entity;
@@ -37,24 +38,21 @@ public class AnimationHandler {
 	
 	public void startAnimation(Player player, SplinePath path) {
 		UUID playerId = player.getUniqueId();
-		playerAnimations.put(playerId, new Animation(path, System.currentTimeMillis(), 5*1000));
+		playerAnimations.put(playerId, new Animation(path, System.currentTimeMillis(), 5 * 1000));
 		Location startLoc = path.getPoint(0).toLocation(player.getWorld());
 		
 		ArmorStand gizmo = player.getWorld().spawn(startLoc, ArmorStand.class);
 		gizmo.setGravity(false);
-//		gizmo.setVisible(false);
-		gizmo.setSmall(true);
-		gizmo.setMarker(true);
+		gizmo.setVisible(false);
 		gizmo.setInvulnerable(true);
 		gizmo.setCollidable(false);
-		gizmo.setCustomNameVisible(true);
-		gizmo.setCustomName("Gizmo");
 		
-		gizmo.addPassenger(player);
+		player.setGameMode(GameMode.SPECTATOR);
+		player.setSpectatorTarget(gizmo);
+		
 		playerGizmos.put(playerId, gizmo.getUniqueId());
 		lastPlayerPositions.put(playerId, startLoc.toVector());
 		player.sendMessage("Animation started.");
-		
 	}
 	
 	private void startAnimating() {
@@ -69,7 +67,7 @@ public class AnimationHandler {
 					UUID playerId = entry.getKey();
 					Player player = Bukkit.getPlayer(playerId);
 					
-					if (!animatePlayer(player,  entry.getValue())) {
+					if (!animatePlayer(player, entry.getValue())) {
 						iterator.remove();
 						playerGizmos.remove(playerId);
 						lastPlayerPositions.remove(playerId);
@@ -90,15 +88,17 @@ public class AnimationHandler {
 		Entity gizmo = Bukkit.getEntity(playerGizmos.get(playerId));
 		
 		try {
-			HackUtil.smoothMoveEntity(gizmo, relativePos);
+			NmsUtil.smoothMoveEntity(gizmo, relativePos);
 		} catch (InvocationTargetException | IllegalAccessException e) {
-			throw new RuntimeException(e);
+			e.printStackTrace();
+			player.sendMessage("DEBUG error while animating");
+			return false;
 		}
-		
 		lastPlayerPositions.put(playerId, nextPos);
 		
-		if (animation.getProgress(System.currentTimeMillis()) == 1) {
+		if (player.getSpectatorTarget() != gizmo || animation.getProgress(System.currentTimeMillis()) == 1) {
 			gizmo.remove();
+			player.setGameMode(GameMode.CREATIVE);
 			return false;
 		}
 		return true;

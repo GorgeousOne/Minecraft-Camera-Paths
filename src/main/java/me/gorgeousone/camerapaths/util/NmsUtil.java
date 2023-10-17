@@ -8,7 +8,7 @@ import org.bukkit.util.Vector;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
-public class HackUtil {
+public class NmsUtil {
 	
 	public static final String NMS_VERSION = Bukkit.getServer().getClass().getPackage().getName().replace(".", ",").split(",")[3] + ".";
 	private static final Class<?> craftEntityClass;
