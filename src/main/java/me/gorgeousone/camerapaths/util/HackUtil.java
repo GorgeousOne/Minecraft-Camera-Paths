@@ -47,6 +47,6 @@ public class HackUtil {
 	public static void smoothTpEntity(Entity entity, Location location) throws InvocationTargetException, IllegalAccessException {
 		Object craftEntity = craftEntityClass.cast(entity);
 		Object handle = getHandleMethod.invoke(craftEntity);
-		setPositionRotationMethod.invoke(handle, location.getX(), location.getY(), location.getZ(), location.getYaw(), location.getPitch());
+		setPositionRotationMethod.invoke(handle, location.getX(), location.getY(), location.getZ(), location.getYaw() + 5, location.getPitch());
 	}
 }

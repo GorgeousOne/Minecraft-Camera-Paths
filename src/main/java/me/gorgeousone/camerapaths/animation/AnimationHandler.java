@@ -3,6 +3,7 @@ package me.gorgeousone.camerapaths.animation;
 import me.gorgeousone.camerapaths.spline.SplinePath;
 import me.gorgeousone.camerapaths.util.HackUtil;
 import org.bukkit.Bukkit;
+import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.entity.ArmorStand;
 import org.bukkit.entity.Entity;
@@ -42,15 +43,14 @@ public class AnimationHandler {
 		
 		ArmorStand gizmo = player.getWorld().spawn(startLoc, ArmorStand.class);
 		gizmo.setGravity(false);
-//		gizmo.setVisible(false);
-		gizmo.setSmall(true);
-		gizmo.setMarker(true);
+		gizmo.setVisible(false);
 		gizmo.setInvulnerable(true);
 		gizmo.setCollidable(false);
-		gizmo.setCustomNameVisible(true);
-		gizmo.setCustomName("Gizmo");
 		
-		gizmo.addPassenger(player);
+		player.setGameMode(GameMode.SPECTATOR);
+		player.setSpectatorTarget(gizmo);
+		
+//		gizmo.addPassenger(player);
 		playerGizmos.put(playerId, gizmo.getUniqueId());
 		lastPlayerPositions.put(playerId, startLoc.toVector());
 		player.sendMessage("Animation started.");
@@ -94,11 +94,11 @@ public class AnimationHandler {
 		} catch (InvocationTargetException | IllegalAccessException e) {
 			throw new RuntimeException(e);
 		}
-		
 		lastPlayerPositions.put(playerId, nextPos);
 		
 		if (animation.getProgress(System.currentTimeMillis()) == 1) {
 			gizmo.remove();
+			player.setGameMode(GameMode.CREATIVE);
 			return false;
 		}
 		return true;
