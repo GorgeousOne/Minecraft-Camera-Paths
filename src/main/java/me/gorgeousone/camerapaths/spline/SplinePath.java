@@ -25,7 +25,7 @@ public class SplinePath {
 		if (index == -1) {
 			index = points.size();
 		}
-		points.add(index, point);
+		points.add(index, point.clone());
 		calcVelocities();
 		calcSplines();
 		return index;
@@ -108,5 +108,16 @@ public class SplinePath {
 	
 	public int getPointCount() {
 		return points.size();
+	}
+	
+	public void clear() {
+		points.clear();
+		velocities.clear();
+		splines.clear();
+		splineLengths.clear();
+	}
+	
+	public List<Vector> getPoints() {
+		return points;
 	}
 }

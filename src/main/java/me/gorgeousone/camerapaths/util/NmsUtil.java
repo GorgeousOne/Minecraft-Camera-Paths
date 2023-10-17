@@ -8,7 +8,7 @@ import org.bukkit.util.Vector;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
-public class HackUtil {
+public class NmsUtil {
 	
 	public static final String NMS_VERSION = Bukkit.getServer().getClass().getPackage().getName().replace(".", ",").split(",")[3] + ".";
 	private static final Class<?> craftEntityClass;
@@ -47,6 +47,6 @@ public class HackUtil {
 	public static void smoothTpEntity(Entity entity, Location location) throws InvocationTargetException, IllegalAccessException {
 		Object craftEntity = craftEntityClass.cast(entity);
 		Object handle = getHandleMethod.invoke(craftEntity);
-		setPositionRotationMethod.invoke(handle, location.getX(), location.getY(), location.getZ(), location.getYaw() + 5, location.getPitch());
+		setPositionRotationMethod.invoke(handle, location.getX(), location.getY(), location.getZ(), location.getYaw(), location.getPitch());
 	}
 }
