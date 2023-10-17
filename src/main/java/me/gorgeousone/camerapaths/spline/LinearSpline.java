@@ -16,6 +16,11 @@ public class LinearSpline implements Spline {
 		return p0.distance(p1);
 	}
 	
+	@Override
+	public Vector interpolate(double t) {
+		return p0.clone().multiply(1 - t).add(p1.clone().multiply(t));
+	}
+	
 	//TODO: use binary search :D
 	public Vector lookup(double dist) {
 		if (dist >= getLength() || dist < 0) {

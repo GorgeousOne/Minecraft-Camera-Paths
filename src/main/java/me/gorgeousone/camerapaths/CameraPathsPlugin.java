@@ -6,6 +6,7 @@ import me.gorgeousone.camerapaths.cmdframework.handler.CommandHandler;
 import me.gorgeousone.camerapaths.commands.KeyframeCommand;
 import me.gorgeousone.camerapaths.commands.StartCommand;
 import me.gorgeousone.camerapaths.commands.TestCommand;
+import me.gorgeousone.camerapaths.commands.VisitKeyframeCommand;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public final class CameraPathsPlugin extends JavaPlugin {
@@ -24,6 +25,7 @@ public final class CameraPathsPlugin extends JavaPlugin {
         ParentCommand cameraCmd = new ParentCommand("cam");
         cameraCmd.addChild(new KeyframeCommand(sessionHandler));
         cameraCmd.addChild(new StartCommand(sessionHandler, animationHandler));
+        cameraCmd.addChild(new VisitKeyframeCommand(sessionHandler));
         cameraCmd.addChild(new TestCommand(sessionHandler));
         
         CommandHandler cmdHandler = new CommandHandler(this);
